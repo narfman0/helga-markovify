@@ -1,2 +1,2 @@
-helga>=1.7.2
+helga>=1.6.5
 markovify>=0.2.5

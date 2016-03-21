@@ -26,10 +26,9 @@ setup(
     license='LICENSE',
     packages=find_packages(),
     include_package_data=True,
-    py_modules=['helga_markovify.plugin'],
     zip_safe=True,
     install_requires=requirements,
-    test_suite='',
+    test_suite='tests/test_markov',
     entry_points = dict(
         helga_plugins=[
             'markovify = helga_markovify.plugin:markovify',
