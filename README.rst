@@ -1,25 +1,30 @@
-# helga-markovify
-
+===============
+helga-markovify
+===============
 
 Ingest corpuses of text and output a sentence generated from markov chains
 
-## Installation
+Installation
+============
 
-After installing and configuring helga, use:
+After installing and configuring helga, use::
 
     pip install helga-markovify
 
 Add 'markovify' to your settings and restart helga.
 
-## Usage
+Usage
+=====
 
 Note: Please use punctuation in your text. This is a tough sticking point in
-practice, but it is helpful
+practice, but it is helpful.
+
+Command syntax::
 
     ingest <topic> <learning_type> <learning_type_source>
     generate <topic>
 
-Arguments:
+Arguments::
 
     topic: like tagging, so helga can respond in different ways
     learning_type: how helga is going to ingest. Can be text, a url to raw data,
@@ -27,14 +32,18 @@ Arguments:
     learning_type_source: the corresponding data e.g. plaintext if learning_type
     is "text", a url if "url", twitter id if "twitter"
 
-## Examples
+Examples
+========
+
+Some example commands::
 
     !markovify ingest hitler text "Mein Kampf is the best Kampf."
     !markovify ingest hitler text "Don't be stupid, be a smarty. Come and join the nazi party."
     !markovify ingest hitler text "Make America hate again."
     !markovify generate hitler
 
-## TODO
+TODO
+====
 
 * Tweets
 * Generate default data from channel
@@ -42,7 +51,8 @@ Arguments:
 * Add settings for max corpus count, max corpus length
 * Travis
 
-## License
+License
+=======
 
 Copyright (c) 2016 Jon Robison
 
