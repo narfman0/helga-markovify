@@ -2,3 +2,4 @@ include *.rst
 include LICENSE
 include requirements.txt
 include MANIFEST
+recursive-include helga-markovify *.txt

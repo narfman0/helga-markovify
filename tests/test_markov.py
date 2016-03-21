@@ -17,7 +17,7 @@ class TestMarkov(TestCase):
     def test_ingest_zen(self):
         from helga_markovify.markov import ingest, generate
         topic = 'zen'
-        with open(os.path.join(os.path.dirname(__file__), 'zen.txt')) as f:
+        with open(os.path.join(os.path.dirname(__file__), '../helga_markovify/zen.txt')) as f:
             ingest(topic, f.read())
         result = generate(topic)
         print 'Generated: ' + result
@@ -25,10 +25,11 @@ class TestMarkov(TestCase):
 
     def test_ingest_text(self):
         from helga_markovify.markov import ingest, generate
-        topic = 'hitler'
+        topic = 'zen'
         ingest(topic, "Mein Kampf is the best Kampf.")
         ingest(topic, "Don't be stupid, be a smarty. Come and join the nazi party.")
         ingest(topic, "Make America hate again.")
+        ingest(topic, "Kampf America is hate nazi smarty. Hate party again filler sentence. America is the best at being terrible.")
         result = generate(topic)
         print 'Generated: ' + result
         self.assertTrue(result)

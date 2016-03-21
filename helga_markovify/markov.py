@@ -7,7 +7,7 @@ from helga.db import db
 def ingest(topic, text, add_punctuation=True):
     """ Ingest the given text for the topic """
     if not text:
-        return 'No text given to ingest for topic: ' + topic
+        raise ValueError('No text given to ingest for topic: ' + topic)
     topic_query = db.markovify.find_one({'topic':topic})
     if topic_query:
         current_text = topic_query['text'].strip()
@@ -29,6 +29,6 @@ def generate(topic, character_count=None):
         sentence = text_model.make_short_sentence(character_count) \
             if character_count else text_model.make_sentence()
         if not sentence:
-            return 'There is not enough in the corpus to generate a sentence.'
+            raise Exception('There is not enough in the corpus to generate a sentence.')
         return sentence
-    return 'No text found for topic: ' + topic
+    raise Exception('No text found for topic: ' + topic)

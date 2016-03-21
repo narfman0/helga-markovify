@@ -2,7 +2,7 @@
 import requests
 from helga import settings
 from helga.plugins import command, match
-from helga_markovify import markov
+from helga_markovify.markov import ingest, generate
 
 
 _ADD_PUNCTUATION = settings.MARKOVIFY_ADD_PUNCTUATION or True
@@ -24,14 +24,22 @@ def markovify(client, channel, nick, message, match):
             text = learning_type_source
         elif learning_type == 'url':
             text = requests.get(learning_type_source).text
+        elif learning_type == 'file':
+            with open(os.path.join(os.path.dirname(__file__), learning_type_source)) as f:
+                ingest(topic, f.read())
         elif learning_type == 'twitter':
-            return 'TODO Twitter not currently supported, sorry :('
-            pass
+            return 'TODO Twitter not currently supported :('
         if _ADD_PUNCTUATION:
             kwargs{'add_punctuation':_ADD_PUNCTUATION}
-        response = markov.ingest(topic, text, **kwargs)
+        try:
+            response = ingest(topic, text, **kwargs)
+        except ValueError as e:
+            return str(e)
     elif args[0] == 'generate':
-        response = markov.generate(topic, **kwargs)
+        try:
+            response = generate(topic, **kwargs)
+        except Exception as e:
+            return str(e)
     else:
         response = "I don't understand %s" % args[0]
     return response

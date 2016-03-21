@@ -28,19 +28,27 @@ Arguments::
 
     topic: like tagging, so helga can respond in different ways
     learning_type: how helga is going to ingest. Can be text, a url to raw data,
-    or a twitter account.
+    a relatively pathed (relative to plugin folder) file, or a twitter account.
     learning_type_source: the corresponding data e.g. plaintext if learning_type
     is "text", a url if "url", twitter id if "twitter"
 
 Examples
 ========
 
-Some example commands::
+Some example commands (file)::
+
+    !markovify ingest zen file zen.txt
+    !markovify generate zen
+    helga> If the implementation is hard to explain, it may be a good idea.
+
+Alternate example (text)::
 
     !markovify ingest hitler text "Mein Kampf is the best Kampf."
     !markovify ingest hitler text "Don't be stupid, be a smarty. Come and join the nazi party."
     !markovify ingest hitler text "Make America hate again."
+    !markovify ingest hitler text "Kampf America is hate nazi smarty. Hate party again filler sentence. America is the best at being terrible."
     !markovify generate hitler
+    helga> Mein Kampf is the best at being terrible.
 
 TODO
 ====
