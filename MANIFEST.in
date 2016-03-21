@@ -2,5 +2,5 @@ include *.rst
 include LICENSE
 include requirements.txt
 include MANIFEST
-include *.txt
-recursive-include helga-markovify *.txt
+global-include *.txt
+prune tests

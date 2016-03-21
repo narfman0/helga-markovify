@@ -35,11 +35,11 @@ Arguments::
 Examples
 ========
 
-Some example commands (file)::
+Example commands (url)::
 
-    !markovify ingest zen file zen.txt
+    !markovify ingest zen url https://hg.python.org/peps/raw-file/tip/pep-0020.txt
     !markovify generate zen
-    helga> If the implementation is hard to explain, it may be a good idea.
+    helga> Sparse is better than ugly.
 
 Alternate example (text)::
 
@@ -49,6 +49,12 @@ Alternate example (text)::
     !markovify ingest hitler text "Kampf America is hate nazi smarty. Hate party again filler sentence. America is the best at being terrible."
     !markovify generate hitler
     helga> Mein Kampf is the best at being terrible.
+
+Some example commands (file)::
+
+    !markovify ingest zen file zen.txt
+    !markovify generate zen
+    helga> If the implementation is hard to explain, it may be a good idea.
 
 TODO
 ====
