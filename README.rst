@@ -47,9 +47,11 @@ TODO
 
 * Tweets
 * Generate default data from channel
-* Check RST
 * Add settings for max corpus count, max corpus length
 * Travis
+* Talk about specific topics
+* Keep history aka conversations
+* Weighted round-robin type conversation, e.g. trump vs jesus vs samuel l jackson vs kim jong un
 
 License
 =======

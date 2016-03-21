@@ -8,19 +8,27 @@ def ingest(topic, text, add_punctuation=True):
     """ Ingest the given text for the topic """
     if not text:
         return 'No text given to ingest for topic: ' + topic
-    query = db.markovify.find({'topic':topic})
-    topic_text = query.next() if query.count() else ''
-    if add_punctuation and topic_text:
-        if not topic_text.strip()[-1] in string.punctuation:
-            topic_text += '. '
-    topic_text += text
-    db.markovify.update({'topic':topic}, {'text':topic_text}, upsert=True)
+    topic_query = db.markovify.find_one({'topic':topic})
+    if topic_query:
+        current_text = topic_query['text'].strip()
+        if add_punctuation and not current_text[-1] in string.punctuation:
+            current_text += '. '
+        spacer = ' ' if not current_text[-1].isspace() and not text[0].isspace() else ''
+        topic_query['text'] = current_text + spacer + text
+        db.markovify.find_one_and_replace({'topic':topic}, topic_query)
+    else:
+        db.markovify.insert({'topic':topic, 'text':text})
 
 
-def generate(topic, character_count=99999):
+def generate(topic, character_count=None):
     """ Generate the text for a given topic """
-    query = db.markovify.find({'topic':topic})
-    if(query.count()):
-        text_model = markovify.Text(query.next())
-        return text_model.make_sentence(character_count)
+    topic_query = db.markovify.find_one({'topic':topic})
+    if(topic_query):
+        text = topic_query['text']
+        text_model = markovify.Text(text)
+        sentence = text_model.make_short_sentence(character_count) \
+            if character_count else text_model.make_sentence()
+        if not sentence:
+            return 'There is not enough in the corpus to generate a sentence.'
+        return sentence
     return 'No text found for topic: ' + topic
