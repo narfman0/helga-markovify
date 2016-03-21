@@ -1,9 +1,10 @@
+from pip.download import PipSession
 from pip.req import parse_requirements
 from setuptools import setup, find_packages
 from helga_markovify import __version__ as version
 
 requirements = [
-    str(req.req) for req in parse_requirements('requirements.txt')
+    str(req.req) for req in parse_requirements('requirements.txt', session=PipSession())
 ]
 
 setup(
