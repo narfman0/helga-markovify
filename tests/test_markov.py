@@ -17,7 +17,7 @@ class TestMarkov(TestCase):
     def test_ingest_zen(self):
         from helga_markovify.markov import ingest, generate
         topic = 'zen'
-        with open(os.path.join(os.path.dirname(__file__), '../helga_markovify/zen.txt')) as f:
+        with open(os.path.join(os.path.dirname(__file__), 'zen.txt')) as f:
             ingest(topic, f.read())
         result = generate(topic)
         print 'Generated: ' + result

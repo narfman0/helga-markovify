@@ -50,11 +50,15 @@ Alternate example (text)::
     !markovify generate hitler
     helga> Mein Kampf is the best at being terrible.
 
-Some example commands (file)::
+Some example commands (dpaste)::
 
-    !markovify ingest zen file zen.txt
+    !markovify ingest zen dpaste http://dpaste.com/1JF2P4S
     !markovify generate zen
     helga> If the implementation is hard to explain, it may be a good idea.
+
+If you have somehow screwed up or broken a corpus, you may drop it completely::
+
+    !markovify drop zen
 
 TODO
 ====

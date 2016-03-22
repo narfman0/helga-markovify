@@ -1,7 +1,8 @@
 """ Plugin entry point for helga """
 import requests
 from helga import settings
-from helga.plugins import command
+from helga.db import db
+from helga.plugins import command, random_ack
 from helga_markovify.markov import ingest, generate
 
 
@@ -13,7 +14,6 @@ Please refer to README for usage: https://github.com/narfman0/helga-markovify/#h
 
 @command('markovify', aliases=['markov'], help=_HELP_TEXT, shlex=True)
 def markovify(client, channel, nick, message, cmd, args):
-    response = ''
     topic = args[1] if len(args) > 1 else _DEFAULT_TOPIC
     kwargs = {}
     if args[0] == 'ingest' or args[0] == 'learn':
@@ -24,22 +24,28 @@ def markovify(client, channel, nick, message, cmd, args):
             text = learning_type_source
         elif learning_type == 'url':
             text = requests.get(learning_type_source).text
-        elif learning_type == 'file':
-            with open(os.path.join(os.path.dirname(__file__), learning_type_source)) as corpus_file:
-                ingest(topic, corpus_file.read())
+        elif learning_type == 'dpaste':
+            try:
+                from bs4 import BeautifulSoup
+                soup = BeautifulSoup(requests.get(learning_type_source).text, "html.parser")
+                text = soup.select('.highlight')[0].text
+            except ImportError:
+                return "BeautifulSoup not installed, can't ingest dpaste!"
         elif learning_type == 'twitter':
             return 'TODO Twitter not currently supported :('
         if _ADD_PUNCTUATION:
             kwargs['add_punctuation'] = _ADD_PUNCTUATION
         try:
-            response = ingest(topic, text, **kwargs)
+            ingest(topic, text, **kwargs)
+            return random_ack()
         except ValueError as e:
             return str(e)
     elif args[0] == 'generate':
         try:
-            response = generate(topic, **kwargs)
+            return generate(topic, **kwargs)
         except Exception as e:
             return str(e)
-    else:
-        response = "I don't understand %s" % args[0]
-    return response
+    elif args[0] == 'drop' or args[0] == 'delete':
+        db.markovify.delete_many({'topic':topic})
+        return random_ack()
+    return "I don't understand args %s" % str(args)
