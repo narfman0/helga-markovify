@@ -11,7 +11,13 @@ After installing and configuring helga, use::
 
     pip install helga-markovify
 
-Add 'markovify' to your settings and restart helga.
+Add ``markovify`` to your settings and restart helga. To use twitter timelines, you
+must add the following to settings as well::
+
+    TWITTER_CONSUMER_KEY = 'asdasd'
+    TWITTER_CONSUMER_SECRET = 'sdfsdfsd'
+    TWITTER_ACCESS_TOKEN = 'fghfghfgh'
+    TWITTER_ACCESS_SECRET = 'ghjghjkghjk'
 
 Usage
 =====
