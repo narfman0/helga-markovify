@@ -56,6 +56,14 @@ Some example commands (dpaste)::
     !markovify generate zen
     helga> If the implementation is hard to explain, it may be a good idea.
 
+Tweet ingestion (twitter)::
+
+    !markov ingest narf twitter narfman0
+    !markov generate narf
+    helga> You won't believe this one weird trick to get the target populace hooked.
+    !markov generate narf
+    helga> FOSS: it only takes one highly incentivized dealer to get 4057$ a month doing nothing!
+
 If you have somehow screwed up or broken a corpus, you may drop it completely::
 
     !markovify drop zen
@@ -63,7 +71,6 @@ If you have somehow screwed up or broken a corpus, you may drop it completely::
 TODO
 ====
 
-* Tweets
 * Generate default data from channel
 * Add settings for max corpus count, max corpus length
 * Travis

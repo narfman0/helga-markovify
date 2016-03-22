@@ -4,20 +4,27 @@ import string
 from helga.db import db
 
 
-def ingest(topic, text, add_punctuation=True):
+def add_punctuation(current_text, new_text, add_punctuation):
+    """ Add punctuation as needed """
+    if add_punctuation and current_text and not current_text[-1] in string.punctuation:
+        current_text += '. '
+    spacer = ' ' if not current_text or (not current_text[-1].isspace() and not new_text[0].isspace()) else ''
+    return current_text + spacer + new_text
+
+
+def ingest(topic, text, add_punctuation=True, **kwargs):
     """ Ingest the given text for the topic """
     if not text:
         raise ValueError('No text given to ingest for topic: ' + topic)
     topic_query = db.markovify.find_one({'topic':topic})
     if topic_query:
-        current_text = topic_query['text'].strip()
-        if add_punctuation and not current_text[-1] in string.punctuation:
-            current_text += '. '
-        spacer = ' ' if not current_text[-1].isspace() and not text[0].isspace() else ''
-        topic_query['text'] = current_text + spacer + text
+        topic_query['text'] = add_punctuation(topic_query['text'].strip(), text, add_punctuation)
+        topic_query.update(kwargs)
         db.markovify.find_one_and_replace({'topic':topic}, topic_query)
     else:
-        db.markovify.insert({'topic':topic, 'text':text})
+        data = {'topic':topic, 'text':text}
+        data.update(kwargs)
+        db.markovify.insert(data)
 
 
 def generate(topic, character_count=None):
