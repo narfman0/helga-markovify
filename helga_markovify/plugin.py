@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from helga import settings
 from helga.db import db
 from helga.plugins import command, random_ack
-from helga_markovify.markov import add_punctuation, ingest, generate
+from helga_markovify.markov import punctuate, ingest, generate
 from helga_markovify.twitter import twitter_timeline
 
 
@@ -39,7 +39,7 @@ def markovify(client, channel, nick, message, cmd, args):
                 tweets, since_id = twitter_timeline(learning_type_source, **twitter_kwargs)
                 text = ''
                 for tweet in tweets:
-                    text = add_punctuation(text, tweet, add_punctuation)
+                    text = punctuate(text, tweet, _ADD_PUNCTUATION)
                 kwargs['since_id'] = since_id
             except Exception as e:
                 return 'Error ingesting topic: ' + topic + ' error: ' + str(e)
