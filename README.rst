@@ -31,13 +31,17 @@ Command syntax::
     generate <topic>
     drop <topic>
 
-Arguments::
+Arguments
+---------
 
-    topic: like tagging, so helga can respond in different ways
-    learning_type: how helga is going to ingest. Can be text, a url to raw data,
-    a url to dpaste, or a twitter account.
-    learning_type_source: the corresponding data e.g. plaintext if learning_type
-    is "text", a url if "url", twitter screen name if "twitter"
+``topic``: like tagging, so helga can respond in different ways
+
+``learning_type``: how helga is going to ingest. Can be text, a url to raw data,
+a url to dpaste, or a twitter account.
+
+``learning_type_source``: the corresponding data e.g. plaintext if learning_type
+is "text", a url if "url", twitter screen name if "twitter"
+
 
 The ``ingest`` command teaches the bot about the topic from the referenced
 corpus. You may teach the bot from any number of sources, it can be twitter or
@@ -48,6 +52,24 @@ The ``generate`` command generates a sentence from the corpus.
 The ``drop`` command drops a particular topic from storage. If a corpus becomes
 corrupt for whatever reason, a user may drop it and re-ingest data to populate
 it again.
+
+Settings
+--------
+
+``MARKOVIFY_ADD_PUNCTUATION``: If we should add periods after lines. You always
+want good punctuation for good generated sentences, this is a pretty safe "True"
+by default.
+
+``MARKOVIFY_CHANNEL_LISTEN``: Ingest current channel chatter. A bit expensive,
+and possibly not great privacy-wise, but that's where the lol-train arrives.
+
+``MARKOVIFY_CHANNEL_GENERATE``: Regex helga listens to to generate response for
+default channel chatter
+
+``MARKOVIFY_TOPIC_DEFAULT``: Default ingestion topic for channel data
+
+``TWITTER_CONSUMER_KEY TWITTER_CONSUMER_SECRET TWITTER_ACCESS_TOKEN TWITTER_ACCESS_SECRET``:
+if using twitter, you'll want these from your configured twitter apps.
 
 Examples
 ========
@@ -106,12 +128,11 @@ If you have somehow screwed up or broken a corpus, you may drop it completely::
 TODO
 ====
 
-* Generate default data from channel
-* Add settings for max corpus count, max corpus length
+* Ingest log files
 * Travis
 * Talk about specific topics
 * Keep history aka conversations
-* Weighted round-robin type conversation, e.g. trump vs jesus vs samuel l jackson vs kim jong un
+* Weighted round-robin type conversation
 
 License
 =======
