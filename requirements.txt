@@ -1,5 +1,6 @@
 beautifulsoup4
 helga>=1.6.5
+helga-log-reader
 markovify>=0.2.5
 pymongo>=2.9
 tweepy

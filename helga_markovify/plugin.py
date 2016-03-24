@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from helga import settings
 from helga.db import db
 from helga.plugins import command, match, random_ack
+from helga_log_reader.plugin import parse_logs
 from helga_markovify.markov import punctuate, ingest, generate
 from helga_markovify.twitter import twitter_timeline
 
@@ -37,7 +38,6 @@ def _handle_command(client, channel, nick, message, cmd, args):
             topic_tweet = db.markovify.find_one({'topic':topic})
             if topic_tweet:
                 twitter_kwargs['since_id'] = topic_tweet['since_id']
-            text = topic_tweet['text'] if topic_tweet else ''
             try:
                 tweets, since_id = twitter_timeline(learning_type_source, **twitter_kwargs)
                 for tweet in tweets:
@@ -45,6 +45,12 @@ def _handle_command(client, channel, nick, message, cmd, args):
                 kwargs['since_id'] = since_id
             except Exception as e:
                 return 'Error ingesting topic: ' + topic + ' error: ' + str(e)
+        elif learning_type == 'logs':
+            # would be wise to save the last accessed date, but we also save on
+            # chat. since you can drop corpus, let's avoid this for now.
+            _, logs = parse_logs(args[3:], channel=learning_type_source)
+            regex = re.compile(r'\n[0-9][0-9]:[0-9][0-9]:[0-9][0-9] - \w+ - ', re.I)
+            text = re.sub(regex, '. ', logs)
         if _ADD_PUNCTUATION:
             kwargs['add_punctuation'] = _ADD_PUNCTUATION
         try:
