@@ -2,7 +2,10 @@
 helga-markovify
 ===============
 
-Ingest corpuses of text and output a sentence generated from markov chains
+Ingest corpuses of text and output a sentence generated from markov chains.
+Helga will now listen to your IRC channel and ingest dialog along the way,
+learning to speak your lingo. You may jump start this with 'logs' ingestion or
+any other ingestion technique.
 
 Installation
 ============
@@ -40,7 +43,8 @@ Arguments
 a url to dpaste, or a twitter account.
 
 ``learning_type_source``: the corresponding data e.g. plaintext if learning_type
-is "text", a url if "url", twitter screen name if "twitter"
+is "text", a url if "url", twitter screen name if "twitter", helga_log_reader
+arguments for "logs" (suggest you go old and use current channel)
 
 
 The ``ingest`` command teaches the bot about the topic from the referenced
@@ -118,6 +122,18 @@ Twitter
     !markovify generate narf
     helga> FOSS: it only takes one highly incentivized dealer to get 4057$ a month doing nothing!
 
+Channel logs
+------------
+
+.. code-block::
+
+    !markovify ingest channel logs --channel #bots --start_date 1999-01-01
+    !markovify generate channel
+    helga> dropbox serving it does ASAP
+
+    helga, thoughts?
+    helga> it could be a crackhead, who wants to haskell bees
+
 Drop corpus
 -----------
 
@@ -128,7 +144,6 @@ If you have somehow screwed up or broken a corpus, you may drop it completely::
 TODO
 ====
 
-* Ingest log files
 * Travis
 * Talk about specific topics
 * Keep history aka conversations
