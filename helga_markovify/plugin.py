@@ -14,7 +14,7 @@ _ADD_PUNCTUATION = settings.MARKOVIFY_ADD_PUNCTUATION if hasattr(settings, 'MARK
 _CHANNEL_LISTEN = settings.MARKOVIFY_CHANNEL_LISTEN if hasattr(settings, 'MARKOVIFY_CHANNEL_LISTEN') else True
 _CHANNEL_GENERATE = settings.CHANNEL_GENERATE if hasattr(settings, 'MARKOVIFY_CHANNEL_GENERATE') else r'.*[what|have]?.*[think|thoughts?|say|respon\w+]\?'
 _CHANNEL_GENERATE_REGEX = re.compile(settings.NICK + _CHANNEL_GENERATE, re.I)
-_DEFAULT_TOPIC = settings.MARKOVIFY_TOPIC_DEFAULT if hasattr(settings, 'MARKOVIFY_TOPIC_DEFAULT') else  'default'
+_DEFAULT_TOPIC = settings.MARKOVIFY_TOPIC_DEFAULT if hasattr(settings, 'MARKOVIFY_TOPIC_DEFAULT') else 'default'
 _HELP_TEXT = """Ingest data to produve markov chain text. Helga always listens.
 Please refer to README for usage: https://github.com/narfman0/helga-markovify#examples"""
 
@@ -35,7 +35,7 @@ def _handle_command(client, channel, nick, message, cmd, args):
             text = soup.select('.highlight')[0].text
         elif learning_type == 'twitter':
             twitter_kwargs = {}
-            topic_tweet = db.markovify.find_one({'topic':topic})
+            topic_tweet = db.markovify.find_one({'topic': topic})
             if topic_tweet:
                 twitter_kwargs['since_id'] = topic_tweet['since_id']
             try:
@@ -51,8 +51,6 @@ def _handle_command(client, channel, nick, message, cmd, args):
             _, logs = parse_logs(args[3:], channel=learning_type_source)
             regex = re.compile(r'\n[0-9][0-9]:[0-9][0-9]:[0-9][0-9] - \w+ - ', re.I)
             text = re.sub(regex, '. ', logs)
-        if _ADD_PUNCTUATION:
-            kwargs['add_punctuation'] = _ADD_PUNCTUATION
         try:
             ingest(topic, text, **kwargs)
             return random_ack()
@@ -60,11 +58,11 @@ def _handle_command(client, channel, nick, message, cmd, args):
             return str(e)
     elif args[0] == 'generate':
         try:
-            return generate(topic, **kwargs)
+            return generate(topic, _ADD_PUNCTUATION, **kwargs)
         except Exception as e:
             return str(e)
     elif args[0] == 'drop' or args[0] == 'delete':
-        db.markovify.delete_many({'topic':topic})
+        db.markovify.delete_many({'topic': topic})
         return random_ack()
     return "I don't understand args %s" % str(args)
 
@@ -76,8 +74,8 @@ def _handle_match(client, channel, nick, message, matches):
     """
     generate_interrogative = _CHANNEL_GENERATE_REGEX.match(message)
     if generate_interrogative:
-        return generate(_DEFAULT_TOPIC)
-    current_topic = db.markovify.find_one({'topic':_DEFAULT_TOPIC})
+        return generate(_DEFAULT_TOPIC, _ADD_PUNCTUATION)
+    current_topic = db.markovify.find_one({'topic': _DEFAULT_TOPIC})
     if current_topic:
         message = punctuate(current_topic['text'], message, _ADD_PUNCTUATION)
     try:

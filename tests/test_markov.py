@@ -19,7 +19,7 @@ class TestMarkov(unittest.TestCase):
         topic = 'zen'
         with open(os.path.join(os.path.dirname(__file__), 'zen.txt')) as f:
             ingest(topic, f.read())
-        result = generate(topic)
+        result = generate(topic, True)
         self.assertTrue(result)
 
 

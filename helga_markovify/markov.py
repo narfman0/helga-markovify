@@ -12,27 +12,23 @@ def punctuate(current_text, new_text, add_punctuation):
     return current_text + spacer + new_text
 
 
-def ingest(topic, text, add_punctuation=True, **kwargs):
+def ingest(topic, text, **kwargs):
     """ Ingest the given text for the topic """
     if not text:
         raise ValueError('No text given to ingest for topic: ' + topic)
-    topic_query = db.markovify.find_one({'topic': topic})
-    if topic_query:
-        topic_query['text'] = punctuate(topic_query['text'].strip(), text, add_punctuation)
-        topic_query.update(kwargs)
-        db.markovify.find_one_and_replace({'topic': topic}, topic_query)
-    else:
-        data = {'topic': topic, 'text': text}
-        data.update(kwargs)
-        db.markovify.insert(data)
+    data = {'topic': topic, 'text': text.strip()}
+    data.update(kwargs)
+    db.markovify.insert(data)
 
 
-def generate(topic, character_count=None):
+def generate(topic, add_punctuation, character_count=None):
     """ Generate the text for a given topic """
-    topic_query = db.markovify.find_one({'topic': topic})
-    if(topic_query):
-        text = topic_query['text']
-        text_model = markovify.Text(text)
+    corpus_cursor = db.markovify.find({'topic': topic})
+    if(corpus_cursor):
+        corpus = ''
+        for text in corpus_cursor:
+            corpus = punctuate(corpus, text['text'], add_punctuation)
+        text_model = markovify.Text(corpus)
         sentence = text_model.make_short_sentence(character_count) \
             if character_count else text_model.make_sentence()
         if not sentence:
