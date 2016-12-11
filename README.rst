@@ -2,6 +2,12 @@
 helga-markovify
 ===============
 
+.. image:: https://badge.fury.io/py/helga-markovify.png
+    :target: https://badge.fury.io/py/helga-markovify
+
+.. image:: https://travis-ci.org/narfman0/helga-markovify.png?branch=master
+    :target: https://travis-ci.org/narfman0/helga-markovify
+
 Ingest corpuses of text and output a sentence generated from markov chains.
 Helga will now listen to your IRC channel and ingest dialog along the way,
 learning to speak your lingo. You may jump start this with 'logs' ingestion or

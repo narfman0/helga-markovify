@@ -16,20 +16,20 @@ def ingest(topic, text, add_punctuation=True, **kwargs):
     """ Ingest the given text for the topic """
     if not text:
         raise ValueError('No text given to ingest for topic: ' + topic)
-    topic_query = db.markovify.find_one({'topic':topic})
+    topic_query = db.markovify.find_one({'topic': topic})
     if topic_query:
         topic_query['text'] = punctuate(topic_query['text'].strip(), text, add_punctuation)
         topic_query.update(kwargs)
-        db.markovify.find_one_and_replace({'topic':topic}, topic_query)
+        db.markovify.find_one_and_replace({'topic': topic}, topic_query)
     else:
-        data = {'topic':topic, 'text':text}
+        data = {'topic': topic, 'text': text}
         data.update(kwargs)
         db.markovify.insert(data)
 
 
 def generate(topic, character_count=None):
     """ Generate the text for a given topic """
-    topic_query = db.markovify.find_one({'topic':topic})
+    topic_query = db.markovify.find_one({'topic': topic})
     if(topic_query):
         text = topic_query['text']
         text_model = markovify.Text(text)

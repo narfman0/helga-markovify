@@ -1,11 +1,10 @@
 import mock
 import os
-import random
+import unittest
 from mongomock import MongoClient
-from unittest import TestCase
 
 
-class TestMarkov(TestCase):
+class TestMarkov(unittest.TestCase):
     def setUp(self):
         super(TestMarkov, self).setUp()
         self.db_patch = mock.patch(
@@ -21,21 +20,6 @@ class TestMarkov(TestCase):
         with open(os.path.join(os.path.dirname(__file__), 'zen.txt')) as f:
             ingest(topic, f.read())
         result = generate(topic)
-        print 'Generated: ' + result
-        self.assertTrue(result)
-
-    def test_ingest_text(self):
-        from helga_markovify.markov import ingest, generate
-        topic = 'zen'
-        ingest(topic, "Mein Kampf is the best Kampf.")
-        ingest(topic, "Don't be stupid, be a smarty. Come and join the nazi party.")
-        ingest(topic, "Make America hate again.")
-        ingest(topic, "Kampf America is hate nazi smarty. Hate party again filler sentence. America is the best at being terrible.")
-        # this can often not be enough for the corpus to handle, so for consistency i'm saving a seed that works
-        random.seed(1337)
-        # call 1342 for a good time *wink*
-        result = generate(topic)
-        print 'Generated: ' + result
         self.assertTrue(result)
 
 
