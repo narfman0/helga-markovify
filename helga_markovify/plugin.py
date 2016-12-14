@@ -11,7 +11,7 @@ from helga_markovify.twitter import twitter_timeline
 
 
 _ADD_PUNCTUATION = settings.MARKOVIFY_ADD_PUNCTUATION if hasattr(settings, 'MARKOVIFY_ADD_PUNCTUATION') else True
-_CHANNEL_LISTEN = settings.MARKOVIFY_CHANNEL_LISTEN if hasattr(settings, 'MARKOVIFY_CHANNEL_LISTEN') else True
+_CHANNEL_LISTEN = settings.MARKOVIFY_CHANNEL_LISTEN if hasattr(settings, 'MARKOVIFY_CHANNEL_LISTEN') else False
 _CHANNEL_GENERATE = settings.CHANNEL_GENERATE if hasattr(settings, 'MARKOVIFY_CHANNEL_GENERATE') else r'.*[what|have]?.*[think|thoughts?|say|respon\w+]\?'
 _CHANNEL_GENERATE_REGEX = re.compile(settings.NICK + _CHANNEL_GENERATE, re.I)
 _DEFAULT_TOPIC = settings.MARKOVIFY_TOPIC_DEFAULT if hasattr(settings, 'MARKOVIFY_TOPIC_DEFAULT') else 'default'
